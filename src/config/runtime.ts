@@ -19,7 +19,7 @@ export async function readConfigJSON(env, hostname, userID, {
 	try {
 		const configText = await env.KV.get('config.json');
 		if (!configText || resetConfig === true) {
-			await env.KV.put('config.json', JSON.stringify(defaultConfigJSON, null, 2));
+			await env.KV.put('config.json', JSON.stringify(cleanConfigForStorage(defaultConfigJSON), null, 2));
 			configJSON = defaultConfigJSON;
 		} else {
 			configJSON = mergeConfigDefaults(defaultConfigJSON, JSON.parse(configText));
@@ -41,15 +41,11 @@ export function cleanConfigForStorage(config) {
 	const reverseProxySOCKS5 = reverseProxy.SOCKS5 || {};
 	const pathTemplate = reverseProxy.pathTemplate || {};
 	return {
-		TIME: config.TIME,
-		HOST: config.HOST,
 		HOSTS: Array.isArray(config.HOSTS) ? config.HOSTS : [],
-		UUID: config.UUID,
 		PATH: config.PATH,
 		protocolType: config.protocolType,
 		transportProtocol: config.transportProtocol,
 		gRPCmode: config.gRPCmode,
-		gRPCUserAgent: config.gRPCUserAgent,
 		skipCertVerify: config.skipCertVerify,
 		enable0RTT: config.enable0RTT,
 		tlsFragment: config.tlsFragment,
@@ -69,7 +65,6 @@ export function cleanConfigForStorage(config) {
 			SUB: preferredSubGen.SUB,
 			SUBNAME: preferredSubGen.SUBNAME,
 			SUBUpdateTime: preferredSubGen.SUBUpdateTime,
-			TOKEN: preferredSubGen.TOKEN,
 		},
 		reverseProxy: {
 			PROXYIP: reverseProxy.PROXYIP,
@@ -101,9 +96,9 @@ function cleanPathTemplateProtocol(config: { global?: string; standard?: string 
 function mergeConfigDefaults(defaultConfig, storedConfig) {
 	if (Array.isArray(defaultConfig)) return Array.isArray(storedConfig) ? storedConfig : [...defaultConfig];
 	if (defaultConfig && typeof defaultConfig === 'object') {
-		const merged = storedConfig && typeof storedConfig === 'object' && !Array.isArray(storedConfig) ? { ...storedConfig } : {};
+		const merged = {};
 		for (const [key, defaultValue] of Object.entries(defaultConfig)) {
-			merged[key] = mergeConfigDefaults(defaultValue, merged[key]);
+			merged[key] = mergeConfigDefaults(defaultValue, storedConfig?.[key]);
 		}
 		return merged;
 	}
