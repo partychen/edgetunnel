@@ -39,6 +39,14 @@ const DEFAULT_SOCKS5_WHITELIST = [
 	'oaiusercontent.com',
 	'*.oaiusercontent.com',
 	'challenges.cloudflare.com',
+	'x.com',
+	'*.x.com',
+	'twitter.com',
+	'*.twitter.com',
+	'twimg.com',
+	'*.twimg.com',
+	't.co',
+	'*.t.co',
 ];
 const BUILD_VERSION = '2026-05-10 03:38:38';
 let cachedProxyArrayIndex = 0;
