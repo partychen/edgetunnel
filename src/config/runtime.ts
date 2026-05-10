@@ -4,6 +4,7 @@ import { normalizeToArray } from '../utils/normalization.js';
 
 const PROXYIP_KEY = "PROXYIP";
 const PATH_PLACEHOLDER = '{{IP:PORT}}';
+const DEFAULT_AUTO_PROXYIP = 'pyip.ygkkk.dpdns.org';
 
 export async function readConfigJSON(env, hostname, userID, {
 	userAgent = "Mozilla/5.0",
@@ -184,9 +185,11 @@ async function normalizeRuntimeConfig(configJSON, env, host, hostname, userID, u
 	if (!configJSON.reverseProxy.pathTemplate.SSTP) configJSON.reverseProxy.pathTemplate.SSTP = { global: "sstp://" + PATH_PLACEHOLDER, standard: "sstp=" + PATH_PLACEHOLDER };
 
 	const proxyConfig = configJSON.reverseProxy.pathTemplate[configJSON.reverseProxy.SOCKS5.enabled?.toUpperCase()];
+	const configuredProxyIP = configJSON.reverseProxy[PROXYIP_KEY];
+	const effectiveProxyIP = configuredProxyIP === 'auto' ? DEFAULT_AUTO_PROXYIP : configuredProxyIP;
 	let pathProxyParam = '';
 	if (proxyConfig && configJSON.reverseProxy.SOCKS5.account) pathProxyParam = (configJSON.reverseProxy.SOCKS5.global ? proxyConfig.global : proxyConfig.standard).replace(PATH_PLACEHOLDER, configJSON.reverseProxy.SOCKS5.account);
-	else if (configJSON.reverseProxy[PROXYIP_KEY] !== 'auto') pathProxyParam = configJSON.reverseProxy.pathTemplate[PROXYIP_KEY].replace(PATH_PLACEHOLDER, configJSON.reverseProxy[PROXYIP_KEY]);
+	else if (effectiveProxyIP) pathProxyParam = configJSON.reverseProxy.pathTemplate[PROXYIP_KEY].replace(PATH_PLACEHOLDER, effectiveProxyIP);
 
 	let proxyQueryParam = '';
 	if (pathProxyParam.includes('?')) {

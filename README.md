@@ -95,7 +95,7 @@ https://你的项目名.pages.dev/admin
 | `KEY` | 否 | 快速订阅路径密钥 |
 | `HOST` | 否 | 自定义节点域名，支持多个 |
 | `PATH` | 否 | 自定义节点路径 |
-| `PROXYIP` | 否 | 自定义 PROXYIP |
+| `PROXYIP` | 否 | 自定义 PROXYIP；不设置时后台的自动 PROXYIP 默认使用 `pyip.ygkkk.dpdns.org` |
 | `GO2SOCKS5` | 否 | SOCKS5 白名单 |
 | `DEBUG` | 否 | 设置为 `1` 或 `true` 时输出调试日志 |
 
