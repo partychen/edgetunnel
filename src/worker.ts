@@ -24,7 +24,22 @@ import { renderAdminPage, renderLoginPage, renderMissingAdminPage, renderMissing
 import { html1101, nginx } from './pages/disguise.js';
 import type { DoHAnswer, LogFn, ParsedProxyAddress, ProxyState } from './types.js';
 
-const DEFAULT_SOCKS5_WHITELIST = ['*tapecontent.net', '*cloudatacdn.com', '*loadshare.org', '*cdn-centaurus.com', 'scholar.google.com'];
+const DEFAULT_SOCKS5_WHITELIST = [
+	'*tapecontent.net',
+	'*cloudatacdn.com',
+	'*loadshare.org',
+	'*cdn-centaurus.com',
+	'scholar.google.com',
+	'chatgpt.com',
+	'*.chatgpt.com',
+	'openai.com',
+	'*.openai.com',
+	'oaistatic.com',
+	'*.oaistatic.com',
+	'oaiusercontent.com',
+	'*.oaiusercontent.com',
+	'challenges.cloudflare.com',
+];
 const BUILD_VERSION = '2026-05-10 03:38:38';
 let cachedProxyArrayIndex = 0;
 
